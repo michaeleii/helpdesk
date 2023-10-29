@@ -8,7 +8,7 @@ export const dynamicParams = true;
 export async function generateMetadata({ params }: { params: { id: string } }) {
   const supabase = createServerComponentClient({ cookies });
   const { data: ticket } = await supabase
-    .from("tickets")
+    .from("ticket")
     .select()
     .eq("id", params.id)
     .single();
@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
 async function getTicket(id: string) {
   const supabase = createServerComponentClient({ cookies });
   const { data: ticket } = await supabase
-    .from("tickets")
+    .from("ticket")
     .select()
     .eq("id", id)
     .single();

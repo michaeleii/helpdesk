@@ -15,7 +15,7 @@ export async function POST(request: Request) {
 
   //insert ticket into supabase
   const { data, error } = await supabase
-    .from("tickets")
+    .from("ticket")
     .insert({
       ...ticket,
       user_email: session?.user?.email,
