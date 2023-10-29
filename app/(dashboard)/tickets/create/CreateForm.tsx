@@ -9,8 +9,8 @@ export default function CreateForm() {
         <input name="title" required type="text" />
       </label>
       <label>
-        <span>Description:</span>
-        <textarea name="description" required />
+        <span>Body:</span>
+        <textarea name="body" required />
       </label>
       <label>
         <span>Priority:</span>
