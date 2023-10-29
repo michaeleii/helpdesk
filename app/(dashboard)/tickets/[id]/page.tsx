@@ -1,32 +1,33 @@
 import { twMerge } from "tailwind-merge";
 import { notFound } from "next/navigation";
-import Ticket from "@/app/Ticket";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { cookies } from "next/headers";
 
 export const dynamicParams = true;
 
 export async function generateMetadata({ params }: { params: { id: string } }) {
-  const ticket = await getTicket(params.id);
+  const supabase = createServerComponentClient({ cookies });
+  const { data: ticket } = await supabase
+    .from("tickets")
+    .select()
+    .eq("id", params.id)
+    .single();
   return {
-    title: `Help Desk | ${ticket.title}`,
+    title: `Help Desk | ${ticket.title || "Ticket not found"}`,
   };
 }
 
-export async function generateStaticParams() {
-  const res = await fetch("http://localhost:4000/tickets");
-  const tickets: Ticket[] = await res.json();
-  return tickets.map((ticket) => ({
-    id: ticket.id,
-  }));
-}
-
 async function getTicket(id: string) {
-  const res = await fetch(`http://localhost:4000/tickets/${id}`, {
-    next: {
-      revalidate: 60, // use 0 to opt out of caching
-    },
-  });
-  if (!res.ok) notFound();
-  return res.json() as Promise<Ticket>;
+  const supabase = createServerComponentClient({ cookies });
+  const { data: ticket } = await supabase
+    .from("tickets")
+    .select()
+    .eq("id", id)
+    .single();
+  if (!ticket) {
+    notFound();
+  }
+  return ticket;
 }
 
 export default async function TicketDetails({

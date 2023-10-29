@@ -7,8 +7,7 @@ export const dynamic = "force-dynamic";
 export async function POST(request: Request) {
   const ticket = await request.json();
   //get supabase instance
-  const cookieStore = cookies();
-  const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
+  const supabase = createRouteHandlerClient({ cookies });
   //get current user session
   const {
     data: { session },
